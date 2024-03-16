@@ -1,36 +1,29 @@
-import java.util.Arrays;
-
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        int[] numbers = {1, 3, 5, 6, 2, 7, 8, 0, 4, 3, 9, 2, 8, 1, 0, 5, 7, 4, 6, 9, 3, 2, 1, 8, 4, 0, 6, 7, 9, 5, 3, 2, 1, 0, 8, 4, 6, 7, 9, 5, 3, 2, 1, 0, 8, 4, 6, 7, 9, 5, 3, 2, 1, 0, 8, 4, 6, 7, 9, 5, 3, 2, 1, 0};
+    public static void main(String[] args) {
+        int[] numbers = {1, 3, 5, 6, 2, 7, 8, 0, 4, 3, 9, 2, 8, 1, 0, 5, 7, 4, 6, 9, 3, 2, 1, 8, 4, 0, 6, 7, 9, 5, 3, 2, 1, 0, 8, 4, 6, 7, 9, 5, 3, 2, 1, 0, 8, 4, 6, 7, 9, 5, 3, 2, 1, 0, 8, 4, 6, 7, 9, 5, 3, 2, 1, 0, 8, 4, 6, 7, 9, 5, 3, 2, 1, 0};
 
-        SumThread sumThread = new SumThread(numbers);
-        MaxThread maxThread = new MaxThread(numbers);
+        // Luồng tính tổng
+        Thread sumThread = new Thread(() -> {
+            int sum = 0;
+            for (int num : numbers) {
+                sum += num;
+            }
+            System.out.println("Tổng của các phần tử trong mảng là: " + sum);
+        });
 
-        Thread sumThreadObj = new Thread(sumThread);
-        Thread maxThreadObj = new Thread(maxThread);
+        // Tìm phần tử lớn nhất
+        Thread maxThread = new Thread(() -> {
+            int max = numbers[0];
+            for (int i = 1; i < numbers.length; i++) {
+                if (numbers[i] > max) {
+                    max = numbers[i];
+                }
+            }
+            System.out.println("Phần tử lớn nhất trong mảng là: " + max);
+        });
 
-        sumThreadObj.start();
-        maxThreadObj.start();
-
-        sumThreadObj.join();
-        maxThreadObj.join();
-
-        System.out.println("Phần tử lớn nhất trong mảng là: " + maxThread.getMax());
-        System.out.println("Tổng của các phần tử trong mảng là: " + sumThread.getSum());
-    }
-}
-
-class SumThread implements Runnable {
-    private int[] numbers;
-    private int sum;
-
-    public SumThread(int[] numbers) {
-        this.numbers = numbers;
-    }
-
-    @Override
-    public void run() {
-        sum = Arrays.stream(numbers).sum();
+        // Khởi chạy cả hai luồng
+        sumThread.start();
+        maxThread.start();
     }
 }
